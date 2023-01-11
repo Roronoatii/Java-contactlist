@@ -1,63 +1,103 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 import model.contact;
 
-
-
 public class App {
 
     private static Scanner _scan = new Scanner(System.in);
+
     public static void main(String[] args) throws Exception {
-        afficherMenu();
-        String choix = _scan.nextLine();
-        while(true){
-        switch(choix){
-            case "1":
+
+        while (true) {
+            afficherMenu();
+            String choix = _scan.nextLine();
+            switch (choix) {
+                case "1":
+                    ajouterContact();
+                    break;
+                case "2":
+                    listerContacts();
+                    break;
+                case "q":
+                    return;
+                default:
+                    System.out.println("Boulet !!!");
+                    break;
+            }
+        }
+    }
+
+    private static void listerContacts() {
+        try {
+            ArrayList<contact> list = contact.lister();
+
+            for (contact contact : list) {
+                System.out.println(contact.getNom() + " " + contact.getPrenom());
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void ajouterContact() throws IOException {
+        contact c = new contact();
+        System.out.println("Saisir le nom");
+        c.setNom(_scan.nextLine());
+
+        System.out.println("Saisir le prénom");
+        c.setPrenom(_scan.nextLine());
+
+        while (true) {
+            try {
+                System.out.println("Saisir le mail");
+                c.setMail(_scan.nextLine());
                 break;
-            case "2":
-                break;
-            case "q":
-                return;
-            default:
-                System.out.println("boulet !!!!");
-                break;
+            } catch (ParseException e) {
+                System.out.println(e.getMessage());
+            }
         }
 
+        while (true) {
+            try {
+                System.out.println("Saisir le téléphone");
+                c.setTelephone(_scan.nextLine());
+                break;
+            } catch (ParseException e) {
+                System.out.println("Mauvais téléphone!");
+            }
         }
-        
-    }
-        private static void ajouterContact(){
-            contact c = new contact();
 
-            System.out.println("saisir le nom");
-            c.setNom(_scan.nextLine());
-
-            System.out.println("saisir le prenom");
-            c.setPrenom(_scan.nextLine());
-
-            System.out.println("saisir le mail");
-            c.setMail(_scan.nextLine());
-
-            System.out.println("saisir le telephone");
-            c.setTelephone(_scan.nextLine());
-           
-            System.out.println("saisir le date De Naissance");
-           // c.setDateNaissance(_scan.nextLine());
-            
-            
+        while (true) {
+            try {
+                System.out.println("Saisir la date de naissance");
+                c.setDateNaissance(_scan.nextLine());
+                break;
+            } catch (ParseException e) {
+                System.out.println("Mauvaise date de naissance!");
+            }
+        }
+        c.enregistrer();
+        System.out.println("Contact enregistré");
 
     }
+
     
-    private static void afficherMenu(){
+
+    private static void afficherMenu() {
         ArrayList<String> menus = new ArrayList<>();
         menus.add("-- MENU --");
         menus.add("1- Ajouter un contact");
         menus.add("2- Lister les contacts");
+        menus.add("3- Modifier un contact");
+        menus.add("4- Supprimer un contact");
         menus.add("q- Quitter");
-        for(String menu : menus ){
+        for (String menu : menus) {
             System.out.println(menu);
         }
     }
-
 }
