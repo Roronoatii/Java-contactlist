@@ -64,10 +64,10 @@ public class Contact {
             ParseException e= new ParseException("Invalid number", 0);
             throw e;
         }
-
+    
     }
     public void setBirthday(String birthday) throws ParseException {
-
+    
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         this.birthday = format.parse(birthday);
         
@@ -79,7 +79,7 @@ public class Contact {
         }finally{
             pw.close();
         }
-        }
+    }
     public static ArrayList<Contact> lister() throws IOException{
         BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
         ArrayList<Contact> list = new ArrayList<>();        
@@ -97,16 +97,16 @@ public class Contact {
 
                 list.add(contact);
                 ligne = br.readLine();
-    }
+            }
         }catch (ParseException | IOException e){
             System.out.println("Error");
 
         }finally{
             br.close();
-            }
+        }
         System.out.println(list);
         return list;
-        }
+    }
 
     public static ArrayList<Contact> chercherNom(String nom) throws IOException{
         BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
@@ -156,9 +156,9 @@ public class Contact {
                     System.out.println(contact.getFirstname() + " " + contact.getLastname() + " " + contact.getEmail() + " " + contact.getNumber() + " " + contact.getBirthday());
                     list.add(contact);
                 }
-    
+
                 ligne = br.readLine();
-        }
+            }
         }catch (ParseException | IOException e){
             System.out.println("Error");
 
