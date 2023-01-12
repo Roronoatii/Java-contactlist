@@ -14,12 +14,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Contact implements Comparable<Contact> {
-
+    public static ArrayList<Contact> contactList = new ArrayList<Contact>();
     private static final String SEPARATEUR = ";";
 
     private String firstname;
     private String lastname;
-    private String email;
+    private static String email;
     private String number;
     private Date birthday;
 
@@ -29,7 +29,7 @@ public class Contact implements Comparable<Contact> {
     public String getLastname() {
         return lastname;
     }
-    public String getEmail() {
+    public static String getEmail() {
         return email;
     }
     public String getNumber() {

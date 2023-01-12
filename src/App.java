@@ -33,7 +33,7 @@ public class App {
                     break;
                 case "5":
                     System.out.print("Email ? : ");
-                    editer(_scan.nextLine());
+                    edit(_scan.nextLine());
                     break;
                 case "6":
                     System.out.print("Email ? : ");
@@ -133,7 +133,6 @@ public class App {
         try{
             ArrayList<Contact> list = Contact.lister();
             Compare compare = new Compare();
-            System.out.println(compare.toString());
             Collections.sort(list, compare);
             String str = list.toString().replaceAll(",","\n").replaceAll(";"," ");
             System.out.println(str);
@@ -141,14 +140,34 @@ public class App {
             System.out.println("Error");
         }
     }
-    public static void triname() throws IOException{
-        
-    }
+    public static void edit(String email) throws IOException{
+        for (Contact editcontact : Contact.contactList){
+            if(Contact.getEmail().equals(email)){
+                if(editcontact != null){
+                    displayedit(editcontact);
+                }
 
-    public static void editer(String email) throws IOException{
-        
-
+            }
+        }
     }
+    public static void displayedit(Contact editcontact){
+        do{
+            ArrayList<String> menus = new ArrayList<>();
+            menus.add("--------------- MENU ---------------");
+            menus.add("/ 1- Edit FirstName                /");
+            menus.add("/ 2- Edit LastName                 /");
+            menus.add("/ 3- Edit Email                    /");
+            menus.add("/ 4- Edit Number                   /");
+            menus.add("/ 5- Edit BirthDay                 /");
+            menus.add("/ q- quitter                       /");
+            menus.add("------------------------------------");
+            for(String menu : menus){
+                System.out.println(menu);
+            }
+        }
+    }
+    
+    
 
     
 
