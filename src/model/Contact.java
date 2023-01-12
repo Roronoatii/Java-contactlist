@@ -13,7 +13,8 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Contact {
+public class Contact implements Comparable<Contact> {
+
     private static final String SEPARATEUR = ";";
 
     private String firstname;
@@ -34,9 +35,8 @@ public class Contact {
     public String getNumber() {
         return number;
     }
-    public String getBirthday() {
-        SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
-        return f.format(birthday);
+    public Date getBirthday() {
+        return birthday;
     }
 
     public void setFirstname(String firstname) {
@@ -67,7 +67,7 @@ public class Contact {
     
     }
     public void setBirthday(String birthday) throws ParseException {
-    
+        
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         this.birthday = format.parse(birthday);
         
@@ -104,7 +104,6 @@ public class Contact {
         }finally{
             br.close();
         }
-        System.out.println(list);
         return list;
     }
 
@@ -192,7 +191,18 @@ public class Contact {
         build.append(SEPARATEUR);
         build.append(this.getNumber());
         build.append(SEPARATEUR);
-        build.append(this.getBirthday());
+        SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+        build.append(f.format(getBirthday()));
         return build.toString();
+    }
+    @Override
+    public int compareTo(Contact c) {
+        if(this.getFirstname().compareTo(c.getFirstname()) == 0 ){
+            return this.getLastname().compareTo(c.getLastname());
+        }else{
+            return this.getFirstname().compareTo(c.getFirstname());
+
+        }
+
     }
 }
