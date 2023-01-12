@@ -2,7 +2,6 @@ package model;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,100 +13,74 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Contact {
+public class Contact implements Comparable<Contact> {
+
     private static final String SEPARATEUR = ";";
 
-    private String nom;
-    private String prenom;
-    private String mail;
-    private String telephone;
-    private Date dateNaissance;
+    private String firstname;
+    private String lastname;
+    private String email;
+    private String number;
+    private Date birthday;
 
-    public String getNom() {
-        return nom;
+    public String getFirstname() {
+        return firstname;
+    }
+    public String getLastname() {
+        return lastname;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public String getNumber() {
+        return number;
+    }
+    public Date getBirthday() {
+        return birthday;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
-
-    public String getPrenom() {
-        return prenom;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) throws ParseException {
-        Pattern pat = Pattern.compile("^[a-zA-Z0-9_.-]+@{1}[a-zA-Z0-9_.-]{2,}\\.[a-zA-Z.]{2,10}$");
-        Matcher matcher = pat.matcher(mail);
-        if (matcher.matches()) {
-            this.mail = mail;
-        } else {
-            ParseException e = new ParseException("Le format du mail est incorrect.", 0);
+    public void setEmail(String email) throws ParseException{
+        Pattern pat = Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
+        Matcher matcher = pat.matcher(email);
+        if(matcher.matches()){
+            this.email = email;
+        }else{
+            ParseException e= new ParseException("Invalid email", 0);
             throw e;
         }
     }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) throws ParseException {
+    public void setNumber(String number) throws ParseException{
         Pattern pat = Pattern.compile("^(?:(?:\\+|00)33|0)\\s*[1-9](?:[\\s.-]*\\d{2}){4}$");
-        Matcher matcher = pat.matcher(telephone);
-        if (matcher.matches()) {
-            this.telephone = telephone;
-        } else {
-            ParseException e = new ParseException("Le format du numéro est incorrect.", 0);
+        Matcher matcher = pat.matcher(number);
+        if(matcher.matches()){
+            this.number = number;
+        }else{
+            ParseException e= new ParseException("Invalid number", 0);
             throw e;
         }
+    
     }
-
-    public String getDateNaissance() {
-        SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
-        return f.format(dateNaissance);
-    }
-
-    public void setDateNaissance(String dateNaissance) throws ParseException {
+    public void setBirthday(String birthday) throws ParseException {
+        
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        this.dateNaissance = format.parse(dateNaissance);
+        this.birthday = format.parse(birthday);
+        
     }
-
-    public void enregistrer() throws IOException {
+    public void enregistrer() throws IOException{
         PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("contacts.csv", true)));
-        try {
+        try{
             pw.println(this.toString());
-        } finally {
+        }finally{
             pw.close();
         }
     }
-
-    public static ArrayList<Contact> lister() throws FileNotFoundException, IOException, ParseException{
-        ArrayList<Contact> list= new ArrayList<>();
-        try(BufferedReader buf = new BufferedReader(new FileReader("contacts.csv"))){
-            String ligne = buf.readLine();
-            while (ligne!= null){
-                String[] tab = ligne.split(SEPARATEUR);
-                Contact c =  new Contact();
-                c.setNom(tab[0]);
-                c.setPrenom(tab[1]);
-                c.setMail(tab[2]);
-                c.setTelephone(tab[3]);
-                c.setDateNaissance(tab[4]);
-                list.add(c);
-                ligne = buf.readLine();
-            }
-        }
-        return list;
-    }
-
-    public static ArrayList<Contact> RechercherPrenom(String prenom) throws IOException{
+    public static ArrayList<Contact> lister() throws IOException{
         BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
         ArrayList<Contact> list = new ArrayList<>();        
         try{
@@ -116,13 +89,40 @@ public class Contact {
                 String[] table = ligne.split(";");
                 Contact contact = new Contact();
 
-                contact.setNom(table[0]);
-                contact.setPrenom(table[1]);
-                contact.setMail(table[2]);
-                contact.setTelephone(table[3]);
-                contact.setDateNaissance(table[4]);
-                if (table[1].equals(prenom)){
-                    System.out.println(contact.getNom() + " " + contact.getPrenom() + " " + contact.getMail() + " " + contact.getTelephone() + " " + contact.getDateNaissance());
+                contact.setFirstname(table[0]);
+                contact.setLastname(table[1]);
+                contact.setEmail(table[2]);
+                contact.setNumber(table[3]);
+                contact.setBirthday(table[4]);
+
+                list.add(contact);
+                ligne = br.readLine();
+            }
+        }catch (ParseException | IOException e){
+            System.out.println("Error");
+
+        }finally{
+            br.close();
+        }
+        return list;
+    }
+
+    public static ArrayList<Contact> chercherPrenom(String prenom) throws IOException{
+        BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
+        ArrayList<Contact> list = new ArrayList<>();        
+        try{
+            String ligne = br.readLine();
+            while(ligne != null){
+                String[] table = ligne.split(";");
+                Contact contact = new Contact();
+
+                contact.setFirstname(table[0]);
+                contact.setLastname(table[1]);
+                contact.setEmail(table[2]);
+                contact.setNumber(table[3]);
+                contact.setBirthday(table[4]);
+                if (table[0].equals(prenom)){
+                    System.out.println(contact.getFirstname() + " " + contact.getLastname() + " " + contact.getEmail() + " " + contact.getNumber() + " " + contact.getBirthday());
                     list.add(contact);
                 }
 
@@ -137,7 +137,36 @@ public class Contact {
 
         return list;
     }
+    public static ArrayList<Contact> chercherDDN(String DDN) throws IOException{
+        BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
+        ArrayList<Contact> list = new ArrayList<>();        
+        try{
+            String ligne = br.readLine();
+            while(ligne != null){
+                String[] table = ligne.split(";");
+                Contact contact = new Contact();
 
+                contact.setFirstname(table[0]);
+                contact.setLastname(table[1]);
+                contact.setEmail(table[2]);
+                contact.setNumber(table[3]);
+                contact.setBirthday(table[4]);
+                if (table[4].equals(DDN)){
+                    System.out.println(contact.getFirstname() + " " + contact.getLastname() + " " + contact.getEmail() + " " + contact.getNumber() + " " + contact.getBirthday());
+                    list.add(contact);
+                }
+
+                ligne = br.readLine();
+            }
+        }catch (ParseException | IOException e){
+            System.out.println("Error");
+
+        }finally{
+            br.close();
+        }
+
+        return list;
+    }
     public static void refreshlist(ArrayList<Contact> list) throws IOException{
         PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("contacts.csv", false)));
         try{
@@ -149,20 +178,31 @@ public class Contact {
             pw.close();
         }
     }
+    
 
     @Override
-    public String toString() {
+    public String toString(){
         StringBuilder build = new StringBuilder();
-        build.append(this.getNom());
+        build.append(this.getFirstname());
         build.append(SEPARATEUR);
-        build.append(this.getPrenom());
+        build.append(this.getLastname());
         build.append(SEPARATEUR);
-        build.append(this.getMail());
+        build.append(this.getEmail());
         build.append(SEPARATEUR);
-        build.append(this.getTelephone());
+        build.append(this.getNumber());
         build.append(SEPARATEUR);
-        build.append(this.getDateNaissance());
+        SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+        build.append(f.format(getBirthday()));
         return build.toString();
     }
+    @Override
+    public int compareTo(Contact c) {
+        if(this.getFirstname().compareTo(c.getFirstname()) == 0 ){
+            return this.getLastname().compareTo(c.getLastname());
+        }else{
+            return this.getFirstname().compareTo(c.getFirstname());
 
+        }
+
+    }
 }
