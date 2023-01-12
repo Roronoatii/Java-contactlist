@@ -32,6 +32,8 @@ public class App {
                     Contact.chercherDDN(_scan.nextLine());
                     break;
                 case "5":
+                    System.out.print("Email ? : ");
+                    editer(_scan.nextLine());
                     break;
                 case "6":
                     System.out.print("Email ? : ");
@@ -141,6 +143,11 @@ public class App {
     }
     public static void triname() throws IOException{
         
+    }
+
+    public static void editer(String email) throws IOException{
+        
+
     }
 
     
