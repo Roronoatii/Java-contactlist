@@ -1,9 +1,12 @@
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
+import model.Compare;
 import model.Contact;
 
 public class App {
@@ -29,11 +32,16 @@ public class App {
                     Contact.chercherDDN(_scan.nextLine());
                     break;
                 case "5":
+                    System.out.print("Email ? : ");
+                    editer(_scan.nextLine());
                     break;
                 case "6":
                     System.out.print("Email ? : ");
                     contactsuppr(_scan.nextLine());
 
+                    break;
+                case "7":
+                    triDDN();
                     break;
                 case "q":
                     return;
@@ -55,6 +63,7 @@ public class App {
         menus.add("/ 4- Chercher contact avec DDN     /");
         menus.add("/ 5- Modifier contact              /");
         menus.add("/ 6- Supprimer contact             /");
+        menus.add("/ 7- Tri DDN                       /");
         menus.add("/ q- quitter                       /");
         menus.add("------------------------------------");
         for(String menu : menus){
@@ -66,15 +75,15 @@ public class App {
 
     private static void addcontact() throws IOException{
         Contact c =  new Contact();
-        System.out.print("Enter first name:");
+        System.out.print("Enter first name: ");
         Scanner input = new Scanner(System.in);
         c.setFirstname(input.nextLine());
-        System.out.print("Enter last name:");
+        System.out.print("Enter last name: ");
         c.setLastname(input.nextLine());
 
         while(true){
             try{
-                System.out.print("Enter email:");
+                System.out.print("Enter email: ");
                 c.setEmail(input.nextLine());
                 break;
             }catch(ParseException e){
@@ -84,7 +93,7 @@ public class App {
 
         while(true){
             try{
-                System.out.print("Enter number:");
+                System.out.print("Enter number: ");
                 c.setNumber(input.nextLine());
                 break;
             }catch(ParseException e){
@@ -95,7 +104,7 @@ public class App {
         while(true){
 
             try{
-                System.out.print("Enter birthdate");
+                System.out.print("Enter birthdate: ");
                 c.setBirthday(input.nextLine());
                 break;
             }catch(ParseException e){
@@ -119,6 +128,26 @@ public class App {
         list.removeIf(condition);
         Contact.refreshlist(list);
         System.out.println(list);
+    }
+    public static void triDDN()throws IOException{
+        try{
+            ArrayList<Contact> list = Contact.lister();
+            Compare compare = new Compare();
+            System.out.println(compare.toString());
+            Collections.sort(list, compare);
+            String str = list.toString().replaceAll(",","\n").replaceAll(";"," ");
+            System.out.println(str);
+        }catch(IOException e){
+            System.out.println("Error");
+        }
+    }
+    public static void triname() throws IOException{
+        
+    }
+
+    public static void editer(String email) throws IOException{
+        
+
     }
 
     
