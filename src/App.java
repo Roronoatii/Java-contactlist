@@ -3,11 +3,13 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
 import model.Compare;
 import model.Contact;
+import model.Email;
 
 public class App {
 
@@ -41,6 +43,12 @@ public class App {
                 case "7":
                     triDDN();
                     break;
+                case "8":
+                    triNOM();
+                    break;
+                case "9":
+                    triMAIL();
+                    break;
                 case "q":
                     return;
                 default:
@@ -62,6 +70,8 @@ public class App {
         menus.add("/ 5- Modifier contact              /");
         menus.add("/ 6- Supprimer contact             /");
         menus.add("/ 7- Tri DDN                       /");
+        menus.add("/ 8- Tri NOM                       /");
+        menus.add("/ 9- Tri MAIL                      /");
         menus.add("/ q- quitter                       /");
         menus.add("------------------------------------");
         for(String menu : menus){
@@ -139,8 +149,16 @@ public class App {
             System.out.println("Error");
         }
     }
-    public static void triname() throws IOException{
+    public static void triNOM() throws IOException{
         
+    }
+
+    public static void triMAIL() throws IOException{
+        List<Email> emails = getEmail(); 
+        Collections.sort(emails); 
+        for (Email email : emails) {
+            System.out.println(email);
+        }
     }
 
     
