@@ -1,103 +1,127 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
-import model.contact;
+import model.Contact;
 
 public class App {
 
-    private static Scanner _scan = new Scanner(System.in);
-
+    private static Scanner _scan =  new Scanner(System.in);
     public static void main(String[] args) throws Exception {
-
-        while (true) {
-            afficherMenu();
-            String choix = _scan.nextLine();
-            switch (choix) {
+        while(true){
+        afficherMenu();
+        String choix = _scan.nextLine();
+            switch(choix){
                 case "1":
-                    ajouterContact();
+                    addcontact();
                     break;
                 case "2":
-                    listerContacts();
+                    contactslisting();
+                    break;
+                case "3":
+                    System.out.print("Nom ? : ");
+                    Contact.chercherNom(_scan.nextLine());
+                    break;
+                case "4":
+                    System.out.print("DDN ? : ");
+                    Contact.chercherDDN(_scan.nextLine());
+                    break;
+                case "5":
+                    break;
+                case "6":
+                    System.out.print("Email ? : ");
+                    contactsuppr(_scan.nextLine());
+
                     break;
                 case "q":
                     return;
                 default:
-                    System.out.println("Boulet !!!");
+                    System.out.println("Entrez un caractère valide");
                     break;
             }
         }
-    }
-
-    private static void listerContacts() {
-        try {
-            ArrayList<contact> list = contact.lister();
-
-            for (contact contact : list) {
-                System.out.println(contact.getNom() + " " + contact.getPrenom());
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private static void ajouterContact() throws IOException {
-        contact c = new contact();
-        System.out.println("Saisir le nom");
-        c.setNom(_scan.nextLine());
-
-        System.out.println("Saisir le prénom");
-        c.setPrenom(_scan.nextLine());
-
-        while (true) {
-            try {
-                System.out.println("Saisir le mail");
-                c.setMail(_scan.nextLine());
-                break;
-            } catch (ParseException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            try {
-                System.out.println("Saisir le téléphone");
-                c.setTelephone(_scan.nextLine());
-                break;
-            } catch (ParseException e) {
-                System.out.println("Mauvais téléphone!");
-            }
-        }
-
-        while (true) {
-            try {
-                System.out.println("Saisir la date de naissance");
-                c.setDateNaissance(_scan.nextLine());
-                break;
-            } catch (ParseException e) {
-                System.out.println("Mauvaise date de naissance!");
-            }
-        }
-        c.enregistrer();
-        System.out.println("Contact enregistré");
-
     }
 
     
 
     private static void afficherMenu() {
         ArrayList<String> menus = new ArrayList<>();
-        menus.add("-- MENU --");
-        menus.add("1- Ajouter un contact");
-        menus.add("2- Lister les contacts");
-        menus.add("3- Modifier un contact");
-        menus.add("4- Supprimer un contact");
-        menus.add("q- Quitter");
-        for (String menu : menus) {
+        menus.add("--------------- MENU ---------------");
+        menus.add("/ 1- Ajouter un contact            /");
+        menus.add("/ 2- Lister les contacts           /");
+        menus.add("/ 3- Chercher contact avec un nom  /");
+        menus.add("/ 4- Chercher contact avec DDN     /");
+        menus.add("/ 5- Modifier contact              /");
+        menus.add("/ 6- Supprimer contact             /");
+        menus.add("/ q- quitter                       /");
+        menus.add("------------------------------------");
+        for(String menu : menus){
             System.out.println(menu);
         }
+
+
     }
+
+    private static void addcontact() throws IOException{
+        Contact c =  new Contact();
+        System.out.print("Enter first name:");
+        Scanner input = new Scanner(System.in);
+        c.setFirstname(input.nextLine());
+        System.out.print("Enter last name:");
+        c.setLastname(input.nextLine());
+
+        while(true){
+            try{
+                System.out.print("Enter email:");
+                c.setEmail(input.nextLine());
+                break;
+            }catch(ParseException e){
+                System.out.println("Incorrect email");
+            }
+        }
+
+        while(true){
+            try{
+                System.out.print("Enter number:");
+                c.setNumber(input.nextLine());
+                break;
+            }catch(ParseException e){
+                System.out.println("Incorrect number");
+            }
+        }
+        
+        while(true){
+
+            try{
+                System.out.print("Enter birthdate");
+                c.setBirthday(input.nextLine());
+                break;
+            }catch(ParseException e){
+                System.out.println("Incorrect birthdate");
+            }
+        }
+    
+        c.enregistrer();
+        System.out.println("Contact added");
+        
+    }
+    private static void contactslisting() throws IOException{
+        ArrayList<Contact> list = Contact.lister();
+        String str = list.toString().replaceAll(",","\n").replaceAll(";"," ");
+        System.out.println(str);
+    }
+    private static void contactsuppr(String contacttosupr) throws IOException{
+        ArrayList<Contact> list = Contact.lister();
+        Predicate<Contact> condition = contact -> contact.getEmail().startsWith(contacttosupr);
+
+        list.removeIf(condition);
+        Contact.refreshlist(list);
+        System.out.println(list);
+    }
+
+    
+
+    
 }
