@@ -1,15 +1,13 @@
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.Comparator;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
 import model.Compare;
 import model.Contact;
-import model.Email;
 
 public class App {
 
@@ -47,6 +45,9 @@ public class App {
                     triNOM();
                     break;
                 case "9":
+                    triPRENOM();
+                    break;
+                case "10":
                     triMAIL();
                     break;
                 case "q":
@@ -71,7 +72,8 @@ public class App {
         menus.add("/ 6- Supprimer contact             /");
         menus.add("/ 7- Tri DDN                       /");
         menus.add("/ 8- Tri NOM                       /");
-        menus.add("/ 9- Tri MAIL                      /");
+        menus.add("/ 9- Tri PRENOM                    /");
+        menus.add("/ 10- Tri MAIL                     /");
         menus.add("/ q- quitter                       /");
         menus.add("------------------------------------");
         for(String menu : menus){
@@ -150,15 +152,51 @@ public class App {
         }
     }
     public static void triNOM() throws IOException{
-        
+        try{
+            ArrayList<Contact> list = Contact.lister();
+            Collections.sort(list, new Comparator<Contact>() {
+                @Override
+                public int compare(Contact c1, Contact c2) {
+                    return c1.getLastname().compareTo(c2.getLastname());
+                }
+            });
+            String str = list.toString().replaceAll(",", "\n").replaceAll(";", " ");
+            System.out.println(str);
+        }catch (IOException exception){
+            System.out.println("Problème avec le tri par nom");
+        }  
+    }
+
+    public static void triPRENOM() throws IOException{
+        try{
+            ArrayList<Contact> list = Contact.lister();
+            Collections.sort(list, new Comparator<Contact>() {
+                @Override
+                public int compare(Contact c1, Contact c2) {
+                    return c1.getFirstname().compareTo(c2.getFirstname());
+                }
+            });
+            String str = list.toString().replaceAll(",", "\n").replaceAll(";", " ");
+            System.out.println(str);
+        }catch (IOException exception){
+            System.out.println("Problème avec le tri par prénom");
+        }  
     }
 
     public static void triMAIL() throws IOException{
-        List<Email> emails = getEmail(); 
-        Collections.sort(emails); 
-        for (Email email : emails) {
-            System.out.println(email);
-        }
+        try{
+            ArrayList<Contact> list = Contact.lister();
+            Collections.sort(list, new Comparator<Contact>() {
+                @Override
+                public int compare(Contact c1, Contact c2) {
+                    return c1.getEmail().compareTo(c2.getEmail());
+                }
+            });
+            String str = list.toString().replaceAll(",", "\n").replaceAll(";", " ");
+            System.out.println(str);
+        }catch (IOException exception){
+            System.out.println("Problème avec le tri par mail");
+        }   
     }
 
     
