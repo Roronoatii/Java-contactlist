@@ -14,40 +14,91 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
+/**
+ * class Contact qui contient toutes les données des contacts et des méthodes qui changent directement certaines données
+ */
 public class Contact implements Comparable<Contact> {
 
+    /**
+     * permet d'ajouter un ";" à chaque fois qu'on l'utilise
+     */
     private static final String SEPARATEUR = ";";
+
+    /**
+     * création d'un scanner qui permet de lire les lignes que l'utilisateur rentre
+     */
     private static Scanner _scan =  new Scanner(System.in);
 
+    /**
+     * création du prénom
+     */
     private String firstname;
+    /**
+     * création du nom
+     */
     private String lastname;
+    /**
+     * création de l'email
+     */
     private String email;
+    /**
+     * création du numéro de téléphone
+     */
     private String number;
+    /**
+     * création de la date d'anniversaire
+     */
     private Date birthday;
 
+    /**
+     * @return le prénom
+     */
     public String getFirstname() {
         return firstname;
     }
+    /**
+     * @return nom
+     */
     public String getLastname() {
         return lastname;
     }
+    /**
+     * @return email
+     */
     public String getEmail() {
         return email;
     }
+    /**
+     * @return numéro de téléphone
+     */
     public String getNumber() {
         return number;
     }
+    /**
+     * @return date de naissance
+     */
     public Date getBirthday() {
         return birthday;
     }
 
+    /**
+     * permet de récupérer le prénom d'un contact
+     * @param firstname
+     */
     public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
+    /**
+     * permet de récupérer le nom d'un contact
+     * @param lastname
+     */
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
+    /**
+     * permet de récupérer l'email d'un contact et de vérifier sa validité
+     * @param email
+     */
     public void setEmail(String email) throws ParseException{
         Pattern pat = Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
         Matcher matcher = pat.matcher(email);
@@ -58,6 +109,10 @@ public class Contact implements Comparable<Contact> {
             throw e;
         }
     }
+    /**
+     * permet de récupérer le numéro de téléphone d'un contact et de vérifier sa validité
+     * @param email
+     */
     public void setNumber(String number) throws ParseException{
         Pattern pat = Pattern.compile("^(?:(?:\\+|00)33|0)\\s*[1-9](?:[\\s.-]*\\d{2}){4}$");
         Matcher matcher = pat.matcher(number);
@@ -69,12 +124,20 @@ public class Contact implements Comparable<Contact> {
         }
     
     }
+    /**
+     * permet de récupérer la date de naissance d'un contact et de vérifier sa validité
+     * @param email
+     */
     public void setBirthday(String birthday) throws ParseException {
         
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         this.birthday = format.parse(birthday);
         
     }
+    /**
+     * permet d'enregistrer le contact dans un fichier "contacts.csv"
+     * @throws IOException
+     */
     public void enregistrer() throws IOException{
         PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("contacts.csv", true)));
         try{
@@ -83,6 +146,11 @@ public class Contact implements Comparable<Contact> {
             pw.close();
         }
     }
+    /**
+     * permet de lister tous les contacts existants
+     * @return
+     * @throws IOException
+     */
     public static ArrayList<Contact> lister() throws IOException{
         BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
         ArrayList<Contact> list = new ArrayList<>();        
@@ -110,6 +178,10 @@ public class Contact implements Comparable<Contact> {
         return list;
     }
 
+    /**
+     * permet de récupérer un contact en fonction du prénom que l'utilisateur rentre 
+     * @throws IOException
+     */
     public static void chercherPrenom() throws IOException{
         Contact c = new Contact();
         System.out.println("Prénom ? ");
@@ -124,6 +196,14 @@ public class Contact implements Comparable<Contact> {
         }
         System.out.println(filteredlist);
     }
+
+
+    /**
+     * permet de trouver un contact lorsque l'utilisateur entre sa date de naissance
+     * @param DDN
+     * @return
+     * @throws IOException
+     */
     public static ArrayList<Contact> chercherDDN(String DDN) throws IOException{
         BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
         ArrayList<Contact> list = new ArrayList<>();        
@@ -154,6 +234,11 @@ public class Contact implements Comparable<Contact> {
 
         return list;
     }
+    /**
+     * permet de prendre en compte les modifications apportées par l'utilisateur et de les enregistrer dans le fichier "contacts.csv"
+     * @param list
+     * @throws IOException
+     */
     public static void refreshlist(ArrayList<Contact> list) throws IOException{
         PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("contacts.csv", false)));
         try{

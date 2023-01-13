@@ -8,10 +8,20 @@ import java.util.function.Predicate;
 
 import model.Compare;
 import model.Contact;
-
+/**
+ * création de la classe qui exécute le main et également les autres class importées ci-dessus
+ */
 public class App {
 
+    /**
+     * création d'un scanner qui permet de lire les lignes que l'utilisateur rentre
+     */
     private static Scanner _scan =  new Scanner(System.in);
+    /**
+     * permet d'afficher un menu, avec chaque touches du clavier ci-dessous qui permettent de faire certaines fonctionnalités
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         while(true){
         afficherMenu();
@@ -61,6 +71,9 @@ public class App {
 
     
 
+    /**
+     * permet d'afficher un menu qui donne les fonctionnalités à l'utilisateur et l'afficher à chaque fois où l'utilisateur a terminé d'utiliser une commande
+     */
     private static void afficherMenu() {
         ArrayList<String> menus = new ArrayList<>();
         menus.add("--------------- MENU ---------------");
@@ -83,6 +96,10 @@ public class App {
 
     }
 
+    /**
+     * permet à l'utilisateur de créer un contact et lorsqu'il est crée, renvoie un message à l'utilisateur
+     * @throws IOException
+     */
     private static void addcontact() throws IOException{
         Contact c =  new Contact();
         System.out.print("Enter first name: ");
@@ -126,11 +143,20 @@ public class App {
         System.out.println("Contact added");
         
     }
+    /**
+     * permet d'afficher la liste de tous les contacts créés
+     * @throws IOException
+     */
     private static void contactslisting() throws IOException{
         ArrayList<Contact> list = Contact.lister();
         String str = list.toString().replaceAll(",","\n").replaceAll(";"," ");
         System.out.println(str);
     }
+    /**
+     * permet à l'utilisateur de supprimer un contact grâce à l'adresse mail qu'il rentre 
+     * @param contacttosupr
+     * @throws IOException
+     */
     private static void contactsuppr(String contacttosupr) throws IOException{
         ArrayList<Contact> list = Contact.lister();
         Predicate<Contact> condition = contact -> contact.getEmail().startsWith(contacttosupr);
@@ -139,6 +165,10 @@ public class App {
         Contact.refreshlist(list);
         System.out.println(list);
     }
+    /**
+     * permet de trier chaque contact par date de naissance et renvoie un tableau trié de la liste des contacts 
+     * @throws IOException
+     */
     public static void triDDN()throws IOException{
         try{
             ArrayList<Contact> list = Contact.lister();
@@ -151,6 +181,10 @@ public class App {
             System.out.println("Error");
         }
     }
+    /**
+     * permet de trier chaque contact par nom et renvoie un tableau trié de la liste des contacts 
+     * @throws IOException
+     */
     public static void triNOM() throws IOException{
         try{
             ArrayList<Contact> list = Contact.lister();
@@ -167,6 +201,10 @@ public class App {
         }  
     }
 
+    /**
+     * permet de trier chaque contact par prénom et renvoie un tableau trié de la liste des contacts 
+     * @throws IOException
+     */
     public static void triPRENOM() throws IOException{
         try{
             ArrayList<Contact> list = Contact.lister();
@@ -183,6 +221,10 @@ public class App {
         }  
     }
 
+    /**
+     * permet de trier chaque contact par email et renvoie un tableau trié de la liste des contacts 
+     * @throws IOException
+     */
     public static void triMAIL() throws IOException{
         try{
             ArrayList<Contact> list = Contact.lister();
@@ -198,6 +240,12 @@ public class App {
             System.out.println("Error");
         }   
     }
+    /**
+     * permet à l'utilisateur de modifier les données du contact sélectionné par ce dernier
+     * @param contacttoedit
+     * @throws IOException
+     * @throws Exception
+     */
     private static void edit(String contacttoedit) throws IOException, Exception{
         try {
             ArrayList<Contact> list = Contact.lister();
@@ -221,6 +269,12 @@ public class App {
             System.out.println("Error");
         }
     }
+    /**
+     * permet de remplacer les changements effectués lors de la modification du contact 
+     * @param contacttoedit
+     * @return
+     * @throws ParseException
+     */
     private static Contact addeditedcontact(String[] contacttoedit) throws ParseException{
         Contact contact = new Contact();
         
