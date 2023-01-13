@@ -33,7 +33,6 @@ public class App {
                     break;
                 case "5":
                     System.out.print("Email ? : ");
-                    edit(_scan.nextLine());
                     break;
                 case "6":
                     System.out.print("Email ? : ");
@@ -140,34 +139,7 @@ public class App {
             System.out.println("Error");
         }
     }
-    public static void edit(String email) throws IOException{
-        for (Contact editcontact : Contact.contactList){
-            if(Contact.getEmail().equals(email)){
-                if(editcontact != null){
-                    displayedit(editcontact);
-                }
 
-            }
-        }
-    }
-    public static void displayedit(Contact editcontact){
-        do{
-            ArrayList<String> menus = new ArrayList<>();
-            menus.add("--------------- MENU ---------------");
-            menus.add("/ 1- Edit FirstName                /");
-            menus.add("/ 2- Edit LastName                 /");
-            menus.add("/ 3- Edit Email                    /");
-            menus.add("/ 4- Edit Number                   /");
-            menus.add("/ 5- Edit BirthDay                 /");
-            menus.add("/ q- quitter                       /");
-            menus.add("------------------------------------");
-            for(String menu : menus){
-                System.out.println(menu);
-            }
-        }
-    }
-    
-    
 
     
 
