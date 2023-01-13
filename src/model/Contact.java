@@ -10,12 +10,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Contact implements Comparable<Contact> {
 
     private static final String SEPARATEUR = ";";
+    private static Scanner _scan =  new Scanner(System.in);
 
     private String firstname;
     private String lastname;
@@ -107,35 +110,19 @@ public class Contact implements Comparable<Contact> {
         return list;
     }
 
-    public static ArrayList<Contact> chercherNom(String nom) throws IOException{
-        BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
-        ArrayList<Contact> list = new ArrayList<>();        
-        try{
-            String ligne = br.readLine();
-            while(ligne != null){
-                String[] table = ligne.split(";");
-                Contact contact = new Contact();
+    public static void chercherPrenom() throws IOException{
+        Contact c = new Contact();
+        System.out.println("Prénom ? ");
+        String inputprenom = _scan.nextLine(); 
+        ArrayList<Contact> list = Contact.lister();
 
-                contact.setFirstname(table[0]);
-                contact.setLastname(table[1]);
-                contact.setEmail(table[2]);
-                contact.setNumber(table[3]);
-                contact.setBirthday(table[4]);
-                if (table[1].equals(nom)){
-                    System.out.println(contact.getFirstname() + " " + contact.getLastname() + " " + contact.getEmail() + " " + contact.getNumber() + " " + contact.getBirthday());
-                    list.add(contact);
-                }
-
-                ligne = br.readLine();
-            }
-        }catch (ParseException | IOException e){
+        ArrayList<Contact> filteredlist = list.stream()
+            .filter(o -> o.getFirstname().toLowerCase().startsWith(inputprenom.toLowerCase()))
+            .collect(Collectors.toCollection(ArrayList::new));
+        if(filteredlist.size() == 0){
             System.out.println("Error");
-
-        }finally{
-            br.close();
         }
-
-        return list;
+        System.out.println(filteredlist);
     }
     public static ArrayList<Contact> chercherDDN(String DDN) throws IOException{
         BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
