@@ -10,3 +10,4 @@ public class Compare implements Comparator<Contact> {
         return c1.getEmail().compareTo(c2.getEmail());
     }
 }
+
