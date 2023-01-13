@@ -24,8 +24,7 @@ public class App {
                     contactslisting();
                     break;
                 case "3":
-                    System.out.print("Prénom ? : ");
-                    Contact.chercherPrenom(_scan.nextLine());
+                    Contact.chercherPrenom();
                     break;
                 case "4":
                     System.out.print("DDN ? : ");
@@ -163,7 +162,7 @@ public class App {
             String str = list.toString().replaceAll(",", "\n").replaceAll(";", " ");
             System.out.println(str);
         }catch (IOException exception){
-            System.out.println("Problème avec le tri par nom");
+            System.out.println("Error");
         }  
     }
 
@@ -179,7 +178,7 @@ public class App {
             String str = list.toString().replaceAll(",", "\n").replaceAll(";", " ");
             System.out.println(str);
         }catch (IOException exception){
-            System.out.println("Problème avec le tri par prénom");
+            System.out.println("Error");
         }  
     }
 
@@ -195,7 +194,7 @@ public class App {
             String str = list.toString().replaceAll(",", "\n").replaceAll(";", " ");
             System.out.println(str);
         }catch (IOException exception){
-            System.out.println("Problème avec le tri par mail");
+            System.out.println("Error");
         }   
     }
 
