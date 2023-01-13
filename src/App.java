@@ -31,11 +31,12 @@ public class App {
                     Contact.chercherDDN(_scan.nextLine());
                     break;
                 case "5":
+                    System.out.println("Entrer adresse mail:");
+                    edit(_scan.nextLine());
                     break;
                 case "6":
                     System.out.print("Email ? : ");
                     contactsuppr(_scan.nextLine());
-
                     break;
                 case "7":
                     triDDN();
@@ -196,6 +197,105 @@ public class App {
         }catch (IOException exception){
             System.out.println("Error");
         }   
+    }
+    private static void edit(String contacttoedit) throws IOException, Exception{
+        try {
+            ArrayList<Contact> list = Contact.lister();
+            for (Contact contact : list) {
+                System.out.println(contact);
+                String str = contact.toString();
+                String[] contactList = str.split(";");
+                System.out.println(contactList[2]);
+                if (contactList[2].equals(contacttoedit)){
+                    System.out.println("fzfzzefzef");
+                    String[] table = contactList;
+                    contactsuppr(contacttoedit);
+                    list.add(addeditedcontact(table));
+                }
+            }
+            Contact.refreshlist(list);
+            System.out.println("Contact edited");
+        } catch (IOException exception) {
+            System.out.println("Error");
+        }catch (Exception exception) {
+            System.out.println("Error");
+        }
+    }
+    private static Contact addeditedcontact(String[] contacttoedit) throws ParseException{
+        Contact contact = new Contact();
+        
+        System.out.println("Enter last name :");
+        System.out.println(contacttoedit[0]);
+        String name = _scan.nextLine();
+        if(name == ""){
+            contact.setLastname(contacttoedit[0]);
+        }else{
+            contact.setLastname(name);
+        }
+        
+        System.out.println("Enter name :");
+        System.out.println(contacttoedit[1]);
+        String firstname = _scan.nextLine();
+        if(firstname == ""){
+            contact.setFirstname(contacttoedit[1]);
+        }else{
+            contact.setFirstname(firstname);
+        }
+
+        do {
+            try {
+                System.out.println("Enter number");
+                System.out.println(contacttoedit[3]);
+                String number = _scan.nextLine();
+                if(number == ""){
+                    contact.setNumber(contacttoedit[3]);
+                }else{
+                    contact.setNumber(number);
+                }
+                break;
+            } catch (Exception exception) {
+                System.out.println("Error");
+            }
+        } while (true);
+
+        do {
+            try {
+                System.out.println("Saisir le mail :");
+                System.out.println(contacttoedit[2]);
+                String mail = _scan.nextLine();
+                if(mail == ""){
+                    contact.setEmail(contacttoedit[2]);
+                }else{
+                    contact.setEmail(mail);
+                }
+                break;
+            } catch (ParseException exception) {
+                System.out.println("Error");
+            }
+        } while (true);
+        do {
+            try {
+                System.out.println("Birthday :");
+                System.out.println(contacttoedit[4]);
+                String date = _scan.nextLine();
+                if(date == ""){
+                    contact.setBirthday(contacttoedit[4]);
+                }else{
+                    contact.setBirthday(date);
+                }
+                break;
+            } catch (ParseException exception) {
+                System.out.println("invalid birthday");
+            }
+        } while (true); 
+
+        try {
+            contact.enregistrer();
+            System.out.println("Contact registered");
+        } catch (IOException exception) {
+            System.out.println("Error");
+        }
+        return contact;
     }
 
     
